@@ -15,18 +15,9 @@ shorten <- function(str) {
 }
 
 percent <- function(n, total) {
-    p <- round(n / total * 100)
-    if (n == total) {
-        "100%"
-    } else if (p == 100) {
-        ">99%"
-    } else if (n == 0) {
-        "0%"
-    } else if (p == 0) {
-        "<1%"
-    } else {
-        paste0(p, "%")
-    }
+    p <- format(round(n / total * 100, 2), nsmall = 2)
+
+    glue::glue("{p}%")
 }
 
 #' @import clisymbols

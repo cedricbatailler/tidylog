@@ -99,17 +99,17 @@ test_that("percent function", {
 
     # 100% change
     f <- function() tidylog::mutate(iris2, Sepal.Length = 1)
-    expect_message(f(), regexp = "100%")
+    expect_message(f(), regexp = "100.00%")
 
     # <1% change, but no 0%
     f <- function() tidylog::mutate(iris2,
             Sepal.Length = ifelse(row_number() == 1, 100, Sepal.Length))
-    expect_message(f(), regexp = "<1%")
+    expect_message(f(), regexp = "0.33%")
 
     # >99% change, but no 100%
     f <- function() tidylog::mutate(iris2,
             Sepal.Length = ifelse(row_number() != 1, 100, Sepal.Length))
-    expect_message(f(), regexp = ">99%")
+    expect_message(f(), regexp = "99.67%")
 
     # no changes
     f <- function() tidylog::mutate(iris2, Sepal.Length = Sepal.Length)
@@ -279,17 +279,17 @@ test_that("mutate: units", {
 test_that("mutate: formatting", {
     expect_message({
         mutate(tibble(x = rep(NA_real_, 1000000)), x = 1)
-    }, "mutate: changed 1,000,000 values (100%) of 'x' (1,000,000 fewer NAs)", fixed = TRUE)
+    }, "mutate: changed 1,000,000 values (100.00%) of 'x' (1,000,000 fewer NAs)", fixed = TRUE)
 
     expect_message({
         mutate(tibble(x = rep(NA_real_, 1000000)), x = ifelse(row_number() == 1, 1, x))
-    }, "mutate: changed one value (<1%) of 'x' (one fewer NA)", fixed = TRUE)
+    }, "mutate: changed one value (0.00%) of 'x' (one fewer NA)", fixed = TRUE)
 
     expect_message({
         mutate(tibble(x = 1:10000), x = ifelse(row_number() == 1, NA, x))
-    }, "mutate: changed one value (<1%) of 'x' (one new NA)", fixed = TRUE)
+    }, "mutate: changed one value (0.01%) of 'x' (one new NA)", fixed = TRUE)
 
     expect_message({
         mutate(tibble(x = 1:10000), x = ifelse(row_number() <= 2, NA, x))
-    }, "mutate: changed 2 values (<1%) of 'x' (2 new NAs)", fixed = TRUE)
+    }, "mutate: changed 2 values (0.02%) of 'x' (2 new NAs)", fixed = TRUE)
 })
