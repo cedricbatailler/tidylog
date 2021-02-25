@@ -15,9 +15,24 @@ shorten <- function(str) {
 }
 
 percent <- function(n, total) {
-    p <- format(round(n / total * 100, 2), nsmall = 2)
+    percent_digits <- getOption("tidylog.percent_digits", 0)
 
-    glue::glue("{p}%")
+    smallest_diff  <- 1 / 10^percent_digits
+
+    p <- format(round(n / total * 100, percent_digits + 1),
+                nsmall = percent_digits)
+
+    if (n == total) {
+        glue::glue("{p}%")
+    } else if (p > 100 - smallest_diff) {
+        glue::glue(">{100-smallest_diff}%")
+    } else if (n == 0) {
+        glue::glue("{p}%")
+    } else if (p < smallest_diff) {
+        glue::glue("<{smallest_diff}%")
+    } else {
+        glue::glue("{p}%")
+    }
 }
 
 #' @import clisymbols
