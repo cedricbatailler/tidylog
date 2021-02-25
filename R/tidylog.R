@@ -19,17 +19,17 @@ percent <- function(n, total) {
 
     smallest_diff  <- 1 / 10^percent_digits
 
-    p <- format(round(n / total * 100, percent_digits + 1),
+    p <- format(round(n / total * 100, percent_digits),
                 nsmall = percent_digits)
 
     if (n == total) {
         glue::glue("{p}%")
-    } else if (p > 100 - smallest_diff) {
-        glue::glue(">{100-smallest_diff}%")
+    } else if (p == 100) {
+        glue::glue("> {100-smallest_diff}%")
     } else if (n == 0) {
         glue::glue("{p}%")
-    } else if (p < smallest_diff) {
-        glue::glue("<{smallest_diff}%")
+    } else if (p == smallest_diff) {
+        glue::glue("< {smallest_diff}%")
     } else {
         glue::glue("{p}%")
     }
